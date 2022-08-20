@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.svelte";
+
+import Projects from "../components/Projects.svelte";
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+		<div class="introduction">
+			<h1>Eetu Mäenpää</h1>
+			<p>Full stack and game developer from Finland</p>
+		</div>
+		<Projects />
+	</main>
+</Layout>
+
+<style>
+	.introduction {
+		text-align: center;
+	}
+</style>

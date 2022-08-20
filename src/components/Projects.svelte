@@ -1,0 +1,94 @@
+<script>
+  import Project from "./Project.svelte";
+</script>
+
+<div>
+  <h2>Projects</h2>
+  <div class="projectListContainer">
+    <Project
+      title="Astroweather"
+      description="A weather dashboard which focuses on astrophotography and stargazing conditions"
+      links={[
+        { href: "/projects/astroweather", title: "Write-up" },
+        {
+          href: "https://github.com/Eldemarkki/astroweather-frontend",
+          title: "Source code (frontend)",
+        },
+        {
+          href: "https://github.com/Eldemarkki/astroweather-backend",
+          title: "Source code (backend)",
+        },
+      ]}
+      image={{
+        src: "/images/Astroweather.png",
+        alt: "Main panel showing weather in Helsinki, with location tabs at the top",
+      }}
+    />
+
+    <Project
+      title="Marching Cubes terrain"
+      description="An implementation of the Marching Cubes algorithm in Unity"
+      links={[
+        {
+          href: "https://github.com/Eldemarkki/Marching-Cubes-Terrain",
+          title: "Source code",
+        },
+        {
+          href: "https://www.youtube.com/watch?v=7GrKaSCoyvs",
+          title: "Demo video",
+        },
+      ]}
+      image={{
+        src: "/images/MarchingCubes.png",
+        alt: "Green, polygonal terrain generated with the Marching Cubes algorithm",
+      }}
+    />
+
+    <Project
+      title="Zoned In"
+      description="Zoned In is a space shooter where you can only shoot when you are inside the orange shootzones. But you can&apos;t just stay there for as long as you want, no no no: Occasionally a diamond will spawn somewhere in the world, and you better find it, as they are very valuable and rare. Collect enough money, and you will be able to purchase upgrades to destroy the enemies even more efficiently!"
+      links={[{ href: "https://eldemarkki.itch.io/zoned-in", title: "Demo" }]}
+      image={{
+        src: "/images/ZonedIn.png",
+        alt: "Image of the game Zoned In, with 3 enemies and 1 orange shootzone.",
+      }}
+    />
+
+    <Project
+      title="Naturebine"
+      description="Naturebine is a nature-themed game where you have to combine different items to create new items. The game contains a whopping 44 different items for you to discover!"
+      links={[{ href: "https://eldemarkki.itch.io/naturebine", title: "Demo" }]}
+      image={{
+        src: "/images/Naturebine.png",
+        alt: "Logo of the game Naturebine, showing a pixel-art tree with the text 'Naturebine' under it in green. Light green background.",
+      }}
+    />
+
+    <Project
+      title="Orbit Hop"
+      description="Orbit Hop is an endless runner game where you have to get as far as possible by rotating the cube around your mouse cursor!"
+      links={[
+        { href: "https://eldemarkki.itch.io/orbit-hop", title: "Demo" },
+        {
+          href: "https://github.com/Eldemarkki/Orbit-Hop",
+          title: "Source code",
+        },
+      ]}
+      image={{
+        src: "/images/OrbitHop.png",
+        alt: "Image of the game Orbit Hop, with a green, yellow and red pole. The player; a blue square is above the yellow pole. The background is completely black.",
+      }}
+    />
+  </div>
+</div>
+
+<style>
+  h2 {
+    margin-bottom: 1rem;
+  }
+  .projectListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+</style>
