@@ -13,5 +13,8 @@
     "@astrojs/svelte": "^1.0.0",
     "astro": "^1.0.6",
     "svelte": "^3.49.0"
+  },
+  "dependencies": {
+    "next-mdx-remote": "^4.1.0"
   }
 }

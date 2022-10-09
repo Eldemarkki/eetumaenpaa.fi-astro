@@ -1,0 +1,93 @@
+---
+slug: comparing-the-performance-difference-between-struct-as-array-and-nativearray-in-unity
+title: Comparing the performance difference between Struct-As-Array and NativeArray in Unity
+releaseDate: "2021-01-16"
+excerpt: What is a Struct-As-Array, how and when should you use one, and what benefits it might bring to your project
+---
+
+## What is a Struct-As-Array
+
+In Unity, you can create a NativeArray like this:
+
+```csharp
+NativeArray<float> values = new NativeArray(8, Allocator.Persistent);
+```
+
+Or alternatively, you would create an array of elements like this:
+
+```csharp
+float[] values = new float[8];
+```
+
+A struct-as-array (or simply SAA, which I will be calling them from now on) is a struct, that has a lot of hardcoded fields, that act as the elements of the struct-as-array. Creating an SAA looks more like this:
+
+```csharp
+public struct StructAsArray8<T>
+{
+    public const int Length = 8;
+
+    public T Element1;
+    public T Element2;
+    public T Element3;
+    public T Element4;
+    public T Element5;
+    public T Element6;
+    public T Element7;
+    public T Element8;
+}
+```
+
+You can probably already see why this would be a horrible idea, but lets continue anyway…
+
+Well, why would anyone use this over an array? The main reason is performance: In my testing environment with minimal code other than this, an SAA was over 20 times faster than a NativeArray.
+
+## Performance
+
+When using a NativeArray, the allocation is more costly than when allocating a struct on the stack, so my hypothesis is that SAAs are faster (to some extent; with a million elements, I&apos;m not so sure anymore).
+
+## Cons of using SAAs
+
+The biggest con is the one you probably already noticed; hardcoded fields. SAAs are very unsustainable in the long run, because they are unpractical to extend.
+
+The other con, maybe a slightly smaller one, is that SAAs are hard to use. If you need to use them in a for-loop, you would have to create a custom indexer, and that would require a whole bunch of if-statements, which just adds to the unsustainability problem. Also, if you are using the Burst-compiler in Unity, you probably wouldn&apos;t get the benefits of vectorization, due to the branching in the indexer.
+
+## How I use SAAs
+
+I have a voxel terrain project, built using Unity, and it has an implementation of the marching cubes algorithm. I won&apos;t go into detail about the marching cubes algorithm in this post. In simple words, it can turn a signed distance field (SDF) into a surface. The SDF is then considered as many cubes. For example, corner number 6 could have a value of 0.3, and corner number 2 could have a value of 0.8.
+
+<Center>
+  <Image
+    src="/images/comparing-the-performance-difference-between-struct-as-array-and-nativearray-in-unity/cube.png"
+    width={404}
+    height={421}
+    alt="Cube where each of its corners are labeled with a number from 0 to 7"
+  />
+</Center>
+
+So I needed a way to give each of these corners a value. This is one of the main features in the voxel engine, so it needed to be as fast as possible. And this is how my first SAA, VoxelCorners\<T>, was born.
+
+## Performance measurements:
+
+Test environment:
+
+- OS: Windows 10, 64-bit
+- CPU: i5-8520U @ 1.6GHz
+- Non-development standalone build
+- Unity 2019.3.15f1
+
+<Center>
+  <Image
+    src="/images/comparing-the-performance-difference-between-struct-as-array-and-nativearray-in-unity/performance_chart.png"
+    width={334}
+    height={289}
+    alt="Chart showing the difference in performance between SAAs and NativeArrays"
+  />
+</Center>
+
+The function was run 1,000,000 times every frame. The value (that is shown on the chart as the height of a bar) is the average tick count of around 200 frames (=samples). You can see that SAAs performed over 20x faster than NativeArrays, but do remember that this was in a testing environment with no other code.
+
+You can find the code used to test this at https://github.com/Eldemarkki/SaaTestCode
+
+## Conclusions
+
+Using an SAA can be beneficial in some, very specific situations. I seriously don&apos;t recommend converting all of your fixed-length arrays to use SAAs, because they are so difficult to maintain and extend. In some cases where you know that the size will never change (such as in my example: a cube will always have exactly 8 corners), you could use SAAs with careful consideration. I am still myself thinking whether there is a better way, but the only thing I&apos;ve found is `stackalloc`, but it has quite limited use cases. If you do manage to find a justified use case for SAAs, their performance boost could be quite considerable.

@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.svelte";
+import { getAllPostsUnsorted } from "../lib/blog";
+import BlogPostLink from "../components/BlogPostLink.svelte";
+
+const slugs = await getAllPostsUnsorted();
+---
+
+<Layout title="Blog | Eetu Mäenpää">
+  <main>
+    <h1>Blog</h1>
+    {
+      slugs.map((post) => (
+        <BlogPostLink
+          title={post.frontmatter.title}
+          slug={post.frontmatter.slug}
+          excerpt={post.frontmatter.excerpt}
+          releaseDate={post.frontmatter.releaseDate}
+          type="blog"
+          isBlogPost
+        />
+      ))
+    }
+  </main>
+</Layout>
