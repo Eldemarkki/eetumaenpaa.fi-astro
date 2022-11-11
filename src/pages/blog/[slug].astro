@@ -1,0 +1,13 @@
+---
+import { getAllPostSlugsUnsorted } from "../../lib/blog";
+
+export const getStaticPaths = () => {
+  return getAllPostSlugsUnsorted().map((slug) => ({
+    params: { slug },
+  }));
+};
+
+const { slug } = Astro.params;
+---
+
+<h1>{slug}</h1>

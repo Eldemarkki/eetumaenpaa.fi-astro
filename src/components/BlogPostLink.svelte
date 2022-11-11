@@ -15,7 +15,7 @@
   <ColoredSquare theme="dark" seed={slug} />
   <div>
     <h3>
-      <a href={slug}>{title}</a>
+      <a href={`/${isBlogPost ? "blog" : "projects"}/${slug}`}>{title}</a>
     </h3>
     <div class="metadata-container">
       <p>{displayDate(releaseDate)}</p>
