@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { displayDate } from "../lib/dateUtils";
   import ColoredSquare from "./ColoredSquare.svelte";
 
   export let slug: string;
@@ -10,7 +11,37 @@
   export let isBlogPost: boolean;
 </script>
 
-<div>
+<div class="container">
   <ColoredSquare theme="dark" seed={slug} />
-  <a href={slug}>{title}</a>
+  <div>
+    <h3>
+      <a href={slug}>{title}</a>
+    </h3>
+    <div class="metadata-container">
+      <p>{displayDate(releaseDate)}</p>
+      <p>{excerpt}</p>
+    </div>
+  </div>
 </div>
+
+<style>
+  h3 {
+    margin: 0;
+  }
+  .container {
+    display: flex;
+    padding: 12px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: top;
+    gap: 12px;
+  }
+  .metadata-container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+  }
+  .metadata-container p {
+    margin: 0;
+  }
+</style>
