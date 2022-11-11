@@ -1,4 +1,5 @@
 ---
+layout: '../../layouts/PostLayout.astro'
 title: Marching Cubes optimizations in Unity
 slug: marching-cubes-optimizations-in-unity
 releaseDate: "2021-01-24"
@@ -55,23 +56,19 @@ Other than that, converting it to use the job system should be quite straightfor
 
 Here are the performance results when comparing using and not using the job system, tested with [this code](https://gist.github.com/Eldemarkki/583e462aeafd69566f862210b73d914b). I ran the marching cubes job on a chunk size of 16^3 voxels 100,000 times, and took the average time of all the runs. The data that was used was generated randomly and generating it was not included in the timing.
 
-<Center>
-  <Image
-    src={"/images/marching-cubes-optimizations-in-unity/tick_count.png"}
-    width={332}
-    height={304}
-  />
-</Center>
+<img
+  src={"/images/marching-cubes-optimizations-in-unity/tick_count.png"}
+  width={332}
+  height={304}
+/>
 
 When using the job system, the tick count was significantly lower, being around 8500, whereas without the job system it was about 38000. That is a difference of over 4x.
 
-<Center>
-  <Image
-    src={"/images/marching-cubes-optimizations-in-unity/milliseconds_count.png"}
-    width={343}
-    height={320}
-  />
-</Center>
+<img
+  src={"/images/marching-cubes-optimizations-in-unity/milliseconds_count.png"}
+  width={343}
+  height={320}
+/>
 
 Something I noticed was that when using the job system, the milliseconds were always exactly proportional to the tick count: the milliseconds were exactly 1/10000 of the tick count. I&apos;m not sure why that is.
 

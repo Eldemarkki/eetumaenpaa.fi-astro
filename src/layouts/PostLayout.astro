@@ -1,0 +1,12 @@
+---
+import { displayDate } from "../lib/dateUtils";
+import Layout from "./Layout.svelte";
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.title}>
+  <p>{displayDate(frontmatter.releaseDate)}</p>
+  <h1>{frontmatter.title}</h1>
+  <slot />
+</Layout>

@@ -2,11 +2,13 @@ import { readdirSync, existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { serialize } from "next-mdx-remote/serialize";
 
-const postsDirectory = join(process.cwd(), "posts");
+const postsDirectory = join(process.cwd(), "src", "pages", "blog");
 
 export const getAllPostSlugsUnsorted = () => {
   const filenames = readdirSync(postsDirectory);
-  const slugs = filenames.map(fn => fn.replace(".mdx", ""));
+  const slugs = filenames
+    .filter((filename) => filename.endsWith(".mdx"))
+    .map(fn => fn.replace(".mdx", ""));
   return slugs;
 }
 

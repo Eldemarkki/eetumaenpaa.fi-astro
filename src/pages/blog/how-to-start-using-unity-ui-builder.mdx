@@ -1,4 +1,5 @@
 ---
+layout: '../../layouts/PostLayout.astro'
 slug: how-to-start-using-unity-ui-builder
 title: How to start using Unity UI Builder
 releaseDate: "2021-01-10"
@@ -36,23 +37,17 @@ After creating the UI Document and naming it whatever you want you open the UI D
 
 The UI Builder is the main window that will be used for designing your interface (unless you want to write code)
 
-<Image
+<img
   src="/images/how-to-start-using-unity-ui-builder/ui_builder_window.png"
-  width={1000}
-  height={542}
   alt="Image showing the UI Builder window in Unity."
 />
 
 On the bottom left are the elements that are available. You can drag them into either the viewport or the hierarchy. You will notice that the elements will be all the way at the top, and will be the full width of the viewport. If you want to be able to move and resize your objects, you can select the object, go to the _Position toggle_, and set it to _Absolute_, instead of _Relative_. Now you can move it around with your mouse or by changing the _Left_ and _Top_ properties of the position.
 
-<Center>
-  <Image
-    src="/images/how-to-start-using-unity-ui-builder/position_menu.png"
-    width={416}
-    height={291}
-    alt="Image showing where the Position menu is in the inspector."
-  />
-</Center>
+<img
+  src="/images/how-to-start-using-unity-ui-builder/position_menu.png"
+  alt="Image showing where the Position menu is in the inspector."
+/>
 
 Now you can go ahead, and craft your interface by dragging different elements into the viewport and positioning them nicely.
 
@@ -72,11 +67,9 @@ The game view will not show any UI yet. You will have to hit play once for the _
 
 Sometimes you may notice that the game view and the viewport inside of the UI Builder window don&apos;t quite match each other. You can fix that by going back into the UI Builder window. Select the UI Document in the hierarchy, and set _Match Game View_ to on.
 
-<Center>
-  <Image
-    src="/images/how-to-start-using-unity-ui-builder/match_game_view_toggle.png"
-    width={302}
-    height={158}
-    alt="Image showing where the Match Game View toggle is in the inspector."
-  />
-</Center>
+<img
+  src="/images/how-to-start-using-unity-ui-builder/match_game_view_toggle.png"
+  width={302}
+  height={158}
+  alt="Image showing where the Match Game View toggle is in the inspector."
+/>

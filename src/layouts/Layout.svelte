@@ -3,7 +3,7 @@
 	export let title: string;
 </script>
 
-<!DOCTYPE html />
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -39,7 +39,7 @@
 				font-family: "Fira Sans", sans-serif;
 				box-sizing: border-box;
 			}
-			pre {
+			pre * {
 				font-family: monospace;
 				margin: 0px;
 			}
@@ -102,6 +102,10 @@
 			body {
 				background-color: var(--color-background);
 				color: var(--color-text);
+			}
+
+			.astro-code {
+				padding: 12px;
 			}
 		</style>
 	</body>
