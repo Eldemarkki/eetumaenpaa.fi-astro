@@ -15,7 +15,7 @@
     "svelte": "^3.53.1"
   },
   "dependencies": {
-    "@astrojs/mdx": "^0.11.6",
+    "@astrojs/mdx": "^0.12.0",
     "next-mdx-remote": "^4.2.0"
   }
 }
