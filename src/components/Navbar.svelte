@@ -7,7 +7,7 @@
       <a href="/blog">Blog</a>
     </li>
     <li>
-      <a href="/contact">Contact</a>
+      <a href="https://github.com/eldemarkki">Github</a>
     </li>
   </ul>
 </nav>
