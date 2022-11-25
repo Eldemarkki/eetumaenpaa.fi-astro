@@ -51,6 +51,7 @@
 				--color-background: #1a1a1a;
 				--color-text: #fff;
 				--color-link: #157f55;
+				--color-alert: #c43d2f;
 			}
 			html,
 			body {
