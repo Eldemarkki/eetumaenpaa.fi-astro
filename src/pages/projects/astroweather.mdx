@@ -1,0 +1,103 @@
+---
+layout: '../../layouts/ProjectLayout.astro'
+name: Astroweather
+slug: astroweather
+blogTitle: "Writeup: Astroweather"
+releaseDate: "2022-06-04"
+description: A weather dashboard with a focus on astrophotography and stargazing conditions
+links: 
+  - { href: "https://github.com/Eldemarkki/astroweather-frontend", title: "Source code (frontend)" }
+  - { href: "https://github.com/Eldemarkki/astroweather-backend", title: "Source code (backend)" }
+coverImagePath: "/images/Astroweather.png"
+coverImageAlt: "Main panel showing weather in Helsinki, with location tabs at the top"
+coverImageWidth: 1283
+coverImageHeight: 1008
+---
+
+## Motivation
+For the last few years (as of writing this in 2022), I&apos;ve been fascinated by astronomy. I really like astrophotography, which means taking pictures of different astronomical objects, such as the Moon, different galaxies and beautiful nebulae. In order to see the night sky well, there can not be much cloud coverage or [light pollution](https://en.wikipedia.org/wiki/Light_pollution).
+
+
+I don&apos;t know any service where I could easily see both weather _and_ light pollution, so the only reasonable thing to do was to make it myself. I wanted it to have all the necessary information in one simple dashboard, so I could quickly check it and see if tonight is suitable for photographing the universe.
+
+## Technical implementation
+
+### Frontend
+
+The frontend is created with [React.js 17](https://reactjs.org/). This was the first &quot;large scale project&quot; (if you can call it that) that I have done with [Mantine](https://mantine.dev/), a newcomer to the UI component scene. I really enjoyed working with Mantine, and I will definitely use it in projects later too.
+
+In the design of Astroweather, I tried to mimic [glassmorphism](https://hype4.academy/articles/design/glassmorphism-in-user-interfaces). I don&apos;t think I succeeded in it that well, because I left out a lot of the details. The back panel is basically a transparent div that has a bit of blur ([except on Firefox...](https://caniuse.com/css-backdrop-filter)).
+
+The interface is divided into these kind of cards. Currently there are 5 different cards (cloudiness, temperature, light pollution, moon and sun). The four first cards are very simple to implement; they just show a few lines of text with a bit of color to show the scale. The last card, sun, was more difficult however. [The sun card](https://github.com/Eldemarkki/astroweather-frontend/blob/cc13fd0dd4ff5e28a2f76c2c91107b614bd4821e/src/components/cards/SunCard.tsx) has a diagram which shows the sun&apos;s position in the sky. The straight horizontal line represents the horizon: when the dot is above it, the sun is visible. The curved line shows the sun&apos; approximate position in the sky during the whole day. I had to calculate the intersection points (sunrise and sunset) and align the horizontal line to that. The sun&apos;s position is roughly a sine wave, so I used that to draw the line. The whole diagram is implemented with scalable vector graphics (SVG), and abstracted into [a generic component](https://github.com/Eldemarkki/astroweather-frontend/blob/cc13fd0dd4ff5e28a2f76c2c91107b614bd4821e/src/components/FunctionDiagram.tsx) that can plot any function.
+
+<img 
+  src={"/images/AstroweatherCards.png"}
+  style={{ marginTop: 8 }} 
+  alt="The 5 different cards in a row"
+/>
+
+The most satisfying thing to implement was definitely the tabs on top of the panel. To be honest, creating the tabs was not very difficult, but I really like the way it came out in the end. It brings a bit of depth to the otherwise boring panel. The rounded corners make it look polished. The one thing I learned while making the tabs were the `:first-child` and `:last-child` CSS selectors. They make it very easy to round the corners on the first and last tabs.
+
+<img 
+  src={"/images/AstroweatherTabs.png"} 
+  style={{ marginTop: 8 }} 
+  alt="The tabs on top of the maun panel, shows tabs for Helsinki, London, adding a new location, editing the location list, and settings"
+/>
+
+#### Libraries used for frontend
+
+- [Mantine](https://mantine.dev/) as the UI component library
+- [Radix Icons](https://icons.radix-ui.com/) for all the different icons
+- [Axios](https://axios-http.com/) for making HTTP requests to the backend
+- [date-fns](https://date-fns.org/) for formatting dates and assisting in calculating sunset and sunrise times
+- [Mapbox](https://www.mapbox.com/) for creating the interactive world maps
+- [React DnD](https://react-dnd.github.io/react-dnd/) for implementing reorderable lists
+- [tsParticles](https://particles.js.org/) for drawing the floating particles in the background
+- [SunCalc](https://github.com/mourner/suncalc) for calculating sunset and sunrise times
+
+### Backend
+
+The backend for Astroweather is mostly implemented in [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/). The Light Pollution API is implemented in Python for reasons I will explain later. The backend is very simple, it basically only proxies requests to the OpenWeatherMap API and returns the response. I implemented caching to reduce the number of requests to the API. There&apos;s really not much more to it.
+
+#### Light Pollution API
+The Light Pollution API was the hardest part of this whole project. As far as I know, there doesn&apos;t exist an API for getting the light pollution levels for a specific location. This meant that I had to source the data and turn it into a queryable format. I already knew about a light pollution map, [https://www.lightpollutionmap.info](https://www.lightpollutionmap.info). Now I returned to it to try and figure out where they get the data from. I noticed that lightpollutionmap.info cited a 2016 study about light pollution, so I used that as a reference too (Falchi, Fabio; Cinzano, Pierantonio; Duriscoe, Dan; Kyba, Christopher C. M.; Elvidge, Christopher D.; Baugh, Kimberly; Portnov, Boris; Rybnikova, Nataliya A.; Furgoni, Riccardo (2016): Supplement to: The New World Atlas of Artificial Night Sky Brightness. V. 1.1. GFZ Data Services. https://doi.org/10.5880/GFZ.1.4.2016.001).
+
+I downloaded the light pollution maps and quickly noticed that they were enormous. A zip that contained all maps was over 650 MB, and when unzipped it was almost 3.5 GB. The file that I needed was around 3.0 GB.
+
+My plan was to read single pixels from the 3 GB file. I started by searching for an npm package for reading pixels from a file. I found one, but starting the server took over 40 seconds. The library was trying to read the whole 3 GB file into memory, which would obviously take a lot of time.
+
+I then searched for a library that could read pixels without loading the whole file into memory. I assumed that npm would have an answer, but after trying a dozen different libraries, none of them worked fast enough. Now I realized, that I may have to switch away from JavaScript and try something else. I chose Python, because I was already familiar with it and it was simple enough.
+
+After trying a few different libraries, none of them working, I found [pyvips](https://github.com/libvips/pyvips). There was one small problem though; I couldn&apos;t install it for some reason. The library had instructions for installing it on Windows, but I just couldn&apos;t get it to work. I ended up installing [WSL](https://docs.microsoft.com/en-us/windows/wsl/) on my Windows machine, and then running the Light Pollution API on that. I probably could have just used a Docker container to run it, which would&apos;ve been a much better solution.
+
+#### Libraries and tools used for backend
+
+- [NGINX](https://www.nginx.com/) to combine the main API and the Light Pollution API 
+
+##### Main API
+
+- [Express](https://expressjs.com/) for the backend server
+- [Axios](https://axios-http.com/) for getting the weather data from OpenWeatherMap API
+- [node-cache](https://github.com/node-cache/node-cache) for caching the weather data from OpenWeatherMap
+
+##### Light Pollution API
+
+- [gunicorn](https://gunicorn.org/) for the backend server
+- [Flask](https://flask.palletsprojects.com/) for backend framework
+- [pyvips](https://github.com/libvips/pyvips) for sampling pixels from the light pollution map
+
+## Lessons learned
+
+### Reordering lists
+
+The user is able to edit, remove and reorder the location list. Reordering can be done either by dragging or by clicking on the arrow buttons. I used the [React DnD](https://react-dnd.github.io/react-dnd/) library to implement the drag and drop functionality. I hadn&apos;t used it before at all, but luckily it was easy to get started. At the time I didn&apos;t know about [Framer&apos;s Reorder component](https://www.framer.com/docs/reorder/). I probably would have used that because of its simplicity, but I didn&apos;t know about it. It was a good learning experience making the list from scratch, though.
+
+<img 
+  src={"/images/AstroweatherLocationList.png"} 
+  style={{ marginTop: 8 }}
+  alt={"A list showing the locations, with a title \"Edit Locations\""}
+/>
+
+### Linux
+
+When I started writing the project, I was using Windows 11. Installing `pyvips` on Windows was too difficult, so I had to resort to WSL. That was one of the final pushes which made me switch to Linux fully. Currently I use [Linux Mint](https://www.linuxmint.com/) as my main operating system, but I still have Windows 11 installed by dual-booting. So creating this project made me indirectly learn Linux. I only know the basics as of right now, but I'm comfortble navigating the terminal and using the most common commands.

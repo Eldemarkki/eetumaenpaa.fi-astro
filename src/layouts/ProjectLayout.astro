@@ -1,0 +1,10 @@
+---
+import Layout from "./Layout.svelte";
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.name}>
+  <h1>{frontmatter.name}</h1>
+  <slot />
+</Layout>

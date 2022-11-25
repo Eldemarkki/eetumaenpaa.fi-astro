@@ -108,6 +108,10 @@
 			.astro-code {
 				padding: 12px;
 			}
+
+			img {
+				max-width: 100%;
+			}
 		</style>
 	</body>
 </html>

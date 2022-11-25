@@ -3,19 +3,22 @@
   import ColoredSquare from "./ColoredSquare.svelte";
 
   export let slug: string;
-  export let releaseDate: number;
+  export let releaseDate: Date;
   export let type: "project" | "blog";
   export let title: string;
   export let excerpt: string;
 
-  export let isBlogPost: boolean;
+  const slugStart = ({
+    project: "projects",
+    blog: "blog",
+  } as const)[type];
 </script>
 
 <div class="container">
   <ColoredSquare theme="dark" seed={slug} />
   <div>
     <h3>
-      <a href={`/${isBlogPost ? "blog" : "projects"}/${slug}`}>{title}</a>
+      <a href={`/${slugStart}/${slug}`}>{title}</a>
     </h3>
     <div class="metadata-container">
       <p>{displayDate(releaseDate)}</p>
