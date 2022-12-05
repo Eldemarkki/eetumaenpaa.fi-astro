@@ -11,20 +11,20 @@ const unsortedPosts = await getAllPostsUnsorted();
     <h1>Blog</h1>
     {
       [...unsortedPosts]
-        .sort((a, b) => b.frontmatter.releaseDate.getTime() - a.frontmatter.releaseDate.getTime())
+        .sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime())
         .map((post) => (
-          post.frontmatter.type === "blog" ? <BlogPostLink
-            title={post.frontmatter.title}
-            slug={post.frontmatter.slug}
-            excerpt={post.frontmatter.excerpt}
-            releaseDate={post.frontmatter.releaseDate}
-            type={post.frontmatter.type}
+          post.type === "blog" ? <BlogPostLink
+            title={post.title}
+            slug={post.slug}
+            excerpt={post.excerpt}
+            releaseDate={new Date(post.releaseDate)}
+            type={post.type}
           /> : <BlogPostLink 
-            title={post.frontmatter.blogTitle}
-            slug={post.frontmatter.slug}
-            excerpt={post.frontmatter.description}
-            releaseDate={post.frontmatter.releaseDate}
-            type={post.frontmatter.type}
+            title={post.blogTitle}
+            slug={post.slug}
+            excerpt={post.description}
+            releaseDate={new Date(post.releaseDate)}
+            type={post.type}
           />
         ))
     }

@@ -1,14 +1,7 @@
-import { readdirSync, existsSync, readFileSync } from "fs";
-import { join } from "path";
-import { serialize } from "next-mdx-remote/serialize";
-
-const postsDirectory = join(process.cwd(), "src", "pages", "blog");
-const projectsDirectory = join(process.cwd(), "src", "pages", "projects");
-
 interface BlogFrontmatter {
   slug: string;
   title: string;
-  releaseDate: Date;
+  releaseDate: string;
   excerpt: string;
   type: "blog";
 }
@@ -18,7 +11,7 @@ interface ProjectFrontmatter {
   name: string;
   slug: string;
   blogTitle: string;
-  releaseDate: Date;
+  releaseDate: string;
   description: string;
   links: {
     href: string;
@@ -26,63 +19,40 @@ interface ProjectFrontmatter {
   }[];
 }
 
-export const getAllPostSlugsUnsorted = () => {
-  const filenames = readdirSync(postsDirectory)
-    .map(s => ({
-      type: "blog",
-      slug: s
-    })).concat(readdirSync(projectsDirectory)
-      .map(s => ({
-        type: "project",
-        slug: s
-      })));
-
-  const slugs = filenames
-    .filter((file) => file.slug.endsWith(".mdx"))
-    .map(post => ({ ...post, slug: post.slug.replace(".mdx", "") }));
-  return slugs as { type: "blog" | "project", slug: string }[];
+const getTypeFromUrl = (url: string) => {
+  if (url.startsWith("/blog/")) return "blog";
+  if (url.startsWith("/projects/")) return "project";
+  return null;
 }
 
-export const getAllPostsUnsorted = () => {
-  const slugs = getAllPostSlugsUnsorted();
-  const posts = slugs.map(async post => await getPostBySlug(post));
-  return Promise.all(posts);
-};
+export const getAllPostsUnsorted = async () => {
+  const promiseGlobs = import.meta.glob("./../**/*.mdx");
 
-const getBlogFrontmatter = (frontmatter: Record<string, string>) => ({
-  type: "blog",
-  slug: frontmatter["slug"],
-  title: frontmatter["title"],
-  releaseDate: new Date(frontmatter["releaseDate"] || 0),
-  excerpt: frontmatter["excerpt"],
-} as BlogFrontmatter)
-
-const getProjectFrontmatter = (frontmatter: Record<string, string>) => ({
-  blogTitle: frontmatter["blogTitle"],
-  name: frontmatter["name"],
-  description: frontmatter["description"],
-  links: frontmatter["links"] as unknown as { href: string; title: string; }[],
-  releaseDate: new Date(frontmatter["releaseDate"] || 0),
-  slug: frontmatter["slug"],
-  type: "project"
-} as ProjectFrontmatter)
-
-export const getPostBySlug = async (post: { type: "blog" | "project", slug: string }) => {
-  const dir = post.type === "blog" ? postsDirectory : projectsDirectory;
-  const fullPath = join(dir, `${post.slug}.mdx`);
-  if (!existsSync(fullPath)) {
-    throw new Error(`Could not locate blog post: ${post.slug}`);
-  }
-
-  const filecontent = readFileSync(fullPath, "utf8");
-  const mdxSource = await serialize(filecontent, { parseFrontmatter: true });
-
-  if (!mdxSource.frontmatter) {
-    throw new Error(`Could not load frontmatter for blog post: ${post.slug}`);
-  }
-
-  return {
-    mdxSource,
-    frontmatter: post.type === "blog" ? getBlogFrontmatter(mdxSource.frontmatter) : getProjectFrontmatter(mdxSource.frontmatter)
-  };
+  return Promise.all(Object.keys(promiseGlobs).map(async (key) => {
+    if (key in promiseGlobs) {
+      const parseFunction = promiseGlobs[key];
+      if (parseFunction) {
+        const post = await parseFunction()
+        if (typeof post === "object" && post !== null && "frontmatter" in post && typeof post.frontmatter === "object" && post.frontmatter !== null) {
+          if ("url" in post && typeof post.url === "string") {
+            return {
+              ...post.frontmatter,
+              type: getTypeFromUrl(post.url),
+            } as BlogFrontmatter | ProjectFrontmatter;
+          }
+          else {
+            throw new Error("url not found in post");
+          }
+        }
+        else {
+          throw new Error("Module is not an object or doesn't contain frontmatter");
+        }
+      } else {
+        throw new Error("Module is not a function");
+      }
+    }
+    else {
+      throw new Error("Key not in promiseGlobs. This should never happen");
+    }
+  }));
 };
