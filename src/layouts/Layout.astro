@@ -1,9 +1,13 @@
-<script lang="ts">
-	import Navbar from "../components/Navbar.svelte";
-	export let title: string;
-</script>
+---
+interface Props {
+	title: string;
+}
 
-<!DOCTYPE html>
+import Navbar from "../components/Navbar.astro";
+
+const { title } = Astro.props;
+---
+
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />

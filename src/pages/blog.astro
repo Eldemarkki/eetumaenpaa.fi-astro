@@ -1,7 +1,7 @@
 ---
-import Layout from "../layouts/Layout.svelte";
+import Layout from "../layouts/Layout.astro";
 import { getAllPostsUnsorted } from "../lib/blog";
-import BlogPostLink from "../components/BlogPostLink.svelte";
+import BlogPostLink from "../components/BlogPostLink.astro";
 
 const unsortedPosts = await getAllPostsUnsorted();
 ---

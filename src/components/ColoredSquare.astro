@@ -1,16 +1,20 @@
-<script lang="ts">
-  import { generateGradient } from "../lib/colorUtils";
+---
+interface Props {
+  seed: string;
+}
 
-  export let seed: string;
-  export let theme: "dark" | "light";
-</script>
+import { generateGradient } from "../lib/colorUtils";
+
+const { seed } = Astro.props;
+---
 
 <div
   style={`background: linear-gradient(30deg, ${generateGradient(
-    theme,
+    "dark",
     seed
   ).join(", ")});`}
-/>
+>
+</div>
 
 <style>
   div {
