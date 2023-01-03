@@ -1,0 +1,76 @@
+---
+interface Props {
+  text: TagType;
+}
+
+import TypescriptLogo from "/logos/typescript.svg";
+import ReactLogo from "/logos/react.svg";
+import PythonLogo from "/logos/python.svg";
+import DockerLogo from "/logos/docker.webp";
+import NodeLogo from "/logos/node.svg";
+import UnityLogo from "/logos/unity.svg";
+import CSharpLogo from "/logos/csharp.svg";
+import type { TagType } from "../lib/TagType";
+const { text } = Astro.props;
+
+const data: Record<
+  TagType,
+  {
+    logo?: string;
+    color?: string;
+  }
+> = {
+  TypeScript: {
+    logo: TypescriptLogo,
+    color: "#3178c6",
+  },
+  "React.js": {
+    logo: ReactLogo,
+    color: "#61dafb",
+  },
+  Python: {
+    logo: PythonLogo,
+    color: "#3776ab",
+  },
+  Docker: {
+    logo: DockerLogo,
+    color: "#2497ed",
+  },
+  "Express.js": {
+    color: "white",
+  },
+  "Node.js": {
+    logo: NodeLogo,
+    color: "#339933",
+  },
+  Unity3D: {
+    logo: UnityLogo,
+    color: "white",
+  },
+  "C#": {
+    logo: CSharpLogo,
+    color: "#68217a"
+  }
+};
+
+const tag = data[text];
+---
+
+<div style={`border-color: ${tag.color ?? "white"};`}>
+  {tag.logo && <img src={tag.logo} alt={text + " Logo"} height="20px" />}
+  <span>
+    {text}
+  </span>
+</div>
+
+<style>
+  div {
+    display: flex;
+    font-size: smaller;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid white;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999999px;
+  }
+</style>

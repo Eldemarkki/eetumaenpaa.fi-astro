@@ -6,20 +6,36 @@ interface Props {
     title: string;
     href: string;
   }[];
-  image: {
-    src: string;
-    alt: string;
-  } | undefined;
+  image:
+    | {
+        src: string;
+        alt: string;
+      }
+    | undefined;
+  tags?: TagType[];
 }
 
+import type { TagType } from "../lib/TagType";
 import LinkCollection from "./LinkCollection.astro";
+import Pill from "./Pill.astro";
 
-const { title, description, links, image } = Astro.props;
+const { title, description, links, image, tags } = Astro.props;
 ---
 
 <section>
   <h3>{title}</h3>
   <LinkCollection links={links} />
+  {
+    tags && (
+      <ul>
+        {tags.map((tag) => (
+          <li>
+            <Pill text={tag} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
   <p>{description}</p>
   {image && <img src={image.src} alt={image.alt} />}
   <slot />
@@ -33,5 +49,12 @@ const { title, description, links, image } = Astro.props;
   img {
     width: 100%;
     height: auto;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    gap: 0.7rem;
   }
 </style>
