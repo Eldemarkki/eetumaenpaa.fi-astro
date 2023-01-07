@@ -6,6 +6,24 @@ import Project from "./Project.astro";
   <h2>Projects</h2>
   <div class="projectListContainer">
     <Project
+      title="Testaustime"
+      description="Testaustime is a time tracking solution focused on programmers that is built by the registered Finnish association Testausserveri ry. I'm the main frontend developer with occasional commits to the backend and editor extensions as well. We currently have editor extensions for Visual Studio Code, Neovim, IntelliJ and Micro."
+      tags={[
+        "TypeScript",
+        "React.js",
+      ]}
+      links={[
+        { href: "https://testaustime.fi/", title: "Website" },
+        { href: "https://github.com/Testaustime/", title: "Source code" },
+        { href: "https://testausserveri.fi/", title: "Testausserveri ry" },
+      ]}
+      image={{
+        src: "/images/testaustime.png",
+        alt: "Testaustime homepage, showing the navbar, controls, and a graph of the time spent coding",
+      }}
+    />
+
+    <Project
       title="Astroweather"
       tags={[
         "TypeScript",
