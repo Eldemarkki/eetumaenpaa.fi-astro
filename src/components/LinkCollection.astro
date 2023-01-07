@@ -18,4 +18,10 @@ const {links} = Astro.props;
     display: flex;
     gap: 1rem;
   }
+
+  @media (max-width: 600px) {
+    div {
+      flex-direction: column;
+    }
+  }
 </style>
