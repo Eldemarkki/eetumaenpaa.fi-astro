@@ -1,9 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getAllPostsUnsorted } from "../lib/blog";
 import BlogPostLink from "../components/BlogPostLink.astro";
+import { getCollection } from "astro:content";
 
-const unsortedPosts = await getAllPostsUnsorted();
+const blogs = await getCollection("blog");
+const projects = await getCollection("project");
+
+const unsortedPosts = [...blogs, ...projects];
 ---
 
 <Layout title="Blog | Eetu Mäenpää">
@@ -11,20 +14,20 @@ const unsortedPosts = await getAllPostsUnsorted();
     <h1>Blog</h1>
     {
       [...unsortedPosts]
-        .sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime())
+        .sort((a, b) => new Date(b.data.releaseDate).getTime() - new Date(a.data.releaseDate).getTime())
         .map((post) => (
-          post.type === "blog" ? <BlogPostLink
-            title={post.title}
+          post.collection === "blog" ? <BlogPostLink
+            title={post.data.title}
             slug={post.slug}
-            excerpt={post.excerpt}
-            releaseDate={new Date(post.releaseDate)}
-            type={post.type}
+            excerpt={post.data.excerpt}
+            releaseDate={new Date(post.data.releaseDate)}
+            type={post.collection}
           /> : <BlogPostLink 
-            title={post.blogTitle}
+            title={post.data.blogTitle}
             slug={post.slug}
-            excerpt={post.description}
-            releaseDate={new Date(post.releaseDate)}
-            type={post.type}
+            excerpt={post.data.description}
+            releaseDate={new Date(post.data.releaseDate)}
+            type={post.collection}
           />
         ))
     }
