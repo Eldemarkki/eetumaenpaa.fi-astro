@@ -10,6 +10,7 @@ interface Props {
     | {
         src: ImageMetadata;
         alt: string;
+        loading?: "lazy" | "eager";
       }
     | undefined;
   tags?: TagType[];
@@ -18,7 +19,7 @@ interface Props {
 import type { TagType } from "../lib/TagType";
 import LinkCollection from "./LinkCollection.astro";
 import Pill from "./Pill.astro";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 
 const { title, description, links, image, tags } = Astro.props;
@@ -39,7 +40,7 @@ const { title, description, links, image, tags } = Astro.props;
     )
   }
   <p>{description}</p>
-  {image && <Image src={image.src} alt={image.alt} />}
+  {image && <Image src={image.src} alt={image.alt} loading={image.loading} />}
   <slot />
 </section>
 
