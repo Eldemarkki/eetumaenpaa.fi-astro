@@ -23,9 +23,9 @@ const slugStart = (
 <div class="container">
   <ColoredSquare seed={slug} />
   <div>
-    <h3>
+    <h2>
       <a href={`/${slugStart}/${slug}`}>{title}</a>
-    </h3>
+    </h2>
     <div class="metadata-container">
       <p>{displayDate(releaseDate)}</p>
       <p>{excerpt}</p>
@@ -34,9 +34,10 @@ const slugStart = (
 </div>
 
 <style>
-  h3 {
+  h2 {
     margin: 0;
-    font-weight: 400; 
+    font-weight: 400;
+    font-size: 1.15rem;
   }
   .container {
     display: flex;
