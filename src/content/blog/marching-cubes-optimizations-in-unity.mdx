@@ -55,11 +55,11 @@ Other than that, converting it to use the job system should be quite straightfor
 
 Here are the performance results when comparing using and not using the job system, tested with [this code](https://gist.github.com/Eldemarkki/583e462aeafd69566f862210b73d914b). I ran the marching cubes job on a chunk size of 16^3 voxels 100,000 times, and took the average time of all the runs. The data that was used was generated randomly and generating it was not included in the timing.
 
-![](../../images/marching-cubes-optimizations-in-unity/tick_count.png)
+![Chart with title "Average tick count from 100,000 samples (lower is better)". The chart has two columns on the X-axis, "without job system" and "with job system". The y-axis has a label "ticks". The first column, "without job system" has a value of about 38,000 ticks, and the second column, "with job system" has a value of about 8,000 ticks.](../../images/marching-cubes-optimizations-in-unity/tick_count.png)
 
 When using the job system, the tick count was significantly lower, being around 8500, whereas without the job system it was about 38000. That is a difference of over 4x.
 
-![](../../images/marching-cubes-optimizations-in-unity/milliseconds_count.png)
+![Chart with title "Average milliseconds from 100,000 samples (lower is better)". The chart has two columns on the X-axis, "without job system" and "with job system". The y-axis has a label "milliseconds". The first column, "without job system" has a value of about 3.25 milliseconds, and the second column, "with job system" has a value of about 0.8 milliseconds.](../../images/marching-cubes-optimizations-in-unity/milliseconds_count.png)
 
 Something I noticed was that when using the job system, the milliseconds were always exactly proportional to the tick count: the milliseconds were exactly 1/10000 of the tick count. I&apos;m not sure why that is.
 
