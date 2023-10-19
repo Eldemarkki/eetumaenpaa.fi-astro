@@ -55,10 +55,7 @@ The other con, maybe a slightly smaller one, is that SAAs are hard to use. If yo
 
 I have a voxel terrain project, built using Unity, and it has an implementation of the marching cubes algorithm. I won&apos;t go into detail about the marching cubes algorithm in this post. In simple words, it can turn a signed distance field (SDF) into a surface. The SDF is then considered as many cubes. For example, corner number 6 could have a value of 0.3, and corner number 2 could have a value of 0.8.
 
-<img
-  src="/images/comparing-the-performance-difference-between-struct-as-array-and-nativearray-in-unity/cube.png"
-  alt="Cube where each of its corners are labeled with a number from 0 to 7"
-/>
+![Cube where each of its corners are labeled with a number from 0 to 7](../../images/comparing-the-performance-difference-between-struct-as-array-and-nativearray-in-unity/cube.png)
 
 So I needed a way to give each of these corners a value. This is one of the main features in the voxel engine, so it needed to be as fast as possible. And this is how my first SAA, VoxelCorners\<T>, was born.
 
@@ -71,10 +68,7 @@ Test environment:
 - Non-development standalone build
 - Unity 2019.3.15f1
 
-<img
-  src="/images/comparing-the-performance-difference-between-struct-as-array-and-nativearray-in-unity/performance_chart.png"
-  alt="Chart showing the difference in performance between SAAs and NativeArrays"
-/>
+![Chart showing the difference in performance between SAAs and NativeArrays](../../images/comparing-the-performance-difference-between-struct-as-array-and-nativearray-in-unity/performance_chart.png)
 
 The function was run 1,000,000 times every frame. The value (that is shown on the chart as the height of a bar) is the average tick count of around 200 frames (=samples). You can see that SAAs performed over 20x faster than NativeArrays, but do remember that this was in a testing environment with no other code.
 

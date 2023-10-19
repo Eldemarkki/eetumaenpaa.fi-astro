@@ -4,14 +4,20 @@ slug: astroweather
 blogTitle: "Writeup: Astroweather"
 releaseDate: "2022-06-04"
 description: A weather dashboard with a focus on astrophotography and stargazing conditions
-links: 
-  - { href: "https://github.com/Eldemarkki/astroweather-frontend", title: "Source code (frontend)" }
-  - { href: "https://github.com/Eldemarkki/astroweather-backend", title: "Source code (backend)" }
+links:
+  - {
+      href: "https://github.com/Eldemarkki/astroweather-frontend",
+      title: "Source code (frontend)",
+    }
+  - {
+      href: "https://github.com/Eldemarkki/astroweather-backend",
+      title: "Source code (backend)",
+    }
 ---
 
 ## Motivation
-For the last few years (as of writing this in 2022), I&apos;ve been fascinated by astronomy. I really like astrophotography, which means taking pictures of different astronomical objects, such as the Moon, different galaxies and beautiful nebulae. In order to see the night sky well, there can not be much cloud coverage or [light pollution](https://en.wikipedia.org/wiki/Light_pollution).
 
+For the last few years (as of writing this in 2022), I&apos;ve been fascinated by astronomy. I really like astrophotography, which means taking pictures of different astronomical objects, such as the Moon, different galaxies and beautiful nebulae. In order to see the night sky well, there can not be much cloud coverage or [light pollution](https://en.wikipedia.org/wiki/Light_pollution).
 
 I don&apos;t know any service where I could easily see both weather _and_ light pollution, so the only reasonable thing to do was to make it myself. I wanted it to have all the necessary information in one simple dashboard, so I could quickly check it and see if tonight is suitable for photographing the universe.
 
@@ -25,19 +31,11 @@ In the design of Astroweather, I tried to mimic [glassmorphism](https://hype4.ac
 
 The interface is divided into these kind of cards. Currently there are 5 different cards (cloudiness, temperature, light pollution, moon and sun). The four first cards are very simple to implement; they just show a few lines of text with a bit of color to show the scale. The last card, sun, was more difficult however. [The sun card](https://github.com/Eldemarkki/astroweather-frontend/blob/cc13fd0dd4ff5e28a2f76c2c91107b614bd4821e/src/components/cards/SunCard.tsx) has a diagram which shows the sun&apos;s position in the sky. The straight horizontal line represents the horizon: when the dot is above it, the sun is visible. The curved line shows the sun&apos; approximate position in the sky during the whole day. I had to calculate the intersection points (sunrise and sunset) and align the horizontal line to that. The sun&apos;s position is roughly a sine wave, so I used that to draw the line. The whole diagram is implemented with scalable vector graphics (SVG), and abstracted into [a generic component](https://github.com/Eldemarkki/astroweather-frontend/blob/cc13fd0dd4ff5e28a2f76c2c91107b614bd4821e/src/components/FunctionDiagram.tsx) that can plot any function.
 
-<img 
-  src={"/images/AstroweatherCards.png"}
-  style={{ marginTop: 8 }} 
-  alt="The 5 different cards in a row"
-/>
+![The 5 different cards in a row](../../images/AstroweatherCards.png)
 
 The most satisfying thing to implement was definitely the tabs on top of the panel. To be honest, creating the tabs was not very difficult, but I really like the way it came out in the end. It brings a bit of depth to the otherwise boring panel. The rounded corners make it look polished. The one thing I learned while making the tabs were the `:first-child` and `:last-child` CSS selectors. They make it very easy to round the corners on the first and last tabs.
 
-<img 
-  src={"/images/AstroweatherTabs.png"} 
-  style={{ marginTop: 8 }} 
-  alt="The tabs on top of the maun panel, shows tabs for Helsinki, London, adding a new location, editing the location list, and settings"
-/>
+![The tabs on top of the maun panel, shows tabs for Helsinki, London, adding a new location, editing the location list, and settings](../../images/AstroweatherTabs.png)
 
 #### Libraries used for frontend
 
@@ -55,6 +53,7 @@ The most satisfying thing to implement was definitely the tabs on top of the pan
 The backend for Astroweather is mostly implemented in [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/). The Light Pollution API is implemented in Python for reasons I will explain later. The backend is very simple, it basically only proxies requests to the OpenWeatherMap API and returns the response. I implemented caching to reduce the number of requests to the API. There&apos;s really not much more to it.
 
 #### Light Pollution API
+
 The Light Pollution API was the hardest part of this whole project. As far as I know, there doesn&apos;t exist an API for getting the light pollution levels for a specific location. This meant that I had to source the data and turn it into a queryable format. I already knew about a light pollution map, [https://www.lightpollutionmap.info](https://www.lightpollutionmap.info). Now I returned to it to try and figure out where they get the data from. I noticed that lightpollutionmap.info cited a 2016 study about light pollution, so I used that as a reference too (Falchi, Fabio; Cinzano, Pierantonio; Duriscoe, Dan; Kyba, Christopher C. M.; Elvidge, Christopher D.; Baugh, Kimberly; Portnov, Boris; Rybnikova, Nataliya A.; Furgoni, Riccardo (2016): Supplement to: The New World Atlas of Artificial Night Sky Brightness. V. 1.1. GFZ Data Services. https://doi.org/10.5880/GFZ.1.4.2016.001).
 
 I downloaded the light pollution maps and quickly noticed that they were enormous. A zip that contained all maps was over 650 MB, and when unzipped it was almost 3.5 GB. The file that I needed was around 3.0 GB.
@@ -67,7 +66,7 @@ After trying a few different libraries, none of them working, I found [pyvips](h
 
 #### Libraries and tools used for backend
 
-- [NGINX](https://www.nginx.com/) to combine the main API and the Light Pollution API 
+- [NGINX](https://www.nginx.com/) to combine the main API and the Light Pollution API
 
 ##### Main API
 
@@ -87,11 +86,7 @@ After trying a few different libraries, none of them working, I found [pyvips](h
 
 The user is able to edit, remove and reorder the location list. Reordering can be done either by dragging or by clicking on the arrow buttons. I used the [React DnD](https://react-dnd.github.io/react-dnd/) library to implement the drag and drop functionality. I hadn&apos;t used it before at all, but luckily it was easy to get started. At the time I didn&apos;t know about [Framer&apos;s Reorder component](https://www.framer.com/docs/reorder/). I probably would have used that because of its simplicity, but I didn&apos;t know about it. It was a good learning experience making the list from scratch, though.
 
-<img 
-  src={"/images/AstroweatherLocationList.png"} 
-  style={{ marginTop: 8 }}
-  alt={"A list showing the locations, with a title \"Edit Locations\""}
-/>
+![A list showing the locations, with a title "Edit Locations"](../../images/AstroweatherLocationList.png)
 
 ### Linux
 

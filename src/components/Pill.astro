@@ -11,44 +11,46 @@ import NodeLogo from "../logos/node.svg";
 import UnityLogo from "../logos/unity.svg";
 import CSharpLogo from "../logos/csharp.svg";
 import type { TagType } from "../lib/TagType";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 const { text } = Astro.props;
 
 const data: Record<
   TagType,
   {
-    logo?: string;
+    logo?: ImageMetadata;
     color?: string;
   }
 > = {
   TypeScript: {
-    logo: TypescriptLogo.src,
+    logo: TypescriptLogo,
     color: "#3178c6",
   },
   "React.js": {
-    logo: ReactLogo.src,
+    logo: ReactLogo,
     color: "#61dafb",
   },
   Python: {
-    logo: PythonLogo.src,
+    logo: PythonLogo,
     color: "#3776ab",
   },
   Docker: {
-    logo: DockerLogo.src,
+    logo: DockerLogo,
     color: "#2497ed",
   },
   "Express.js": {
     color: "white",
   },
   "Node.js": {
-    logo: NodeLogo.src,
+    logo: NodeLogo,
     color: "#339933",
   },
   Unity3D: {
-    logo: UnityLogo.src,
+    logo: UnityLogo,
     color: "white",
   },
   "C#": {
-    logo: CSharpLogo.src,
+    logo: CSharpLogo,
     color: "#68217a",
   },
 };
@@ -57,7 +59,7 @@ const tag = data[text];
 ---
 
 <div style={`border-color: ${tag.color ?? "white"};`}>
-  {tag.logo && <img src={tag.logo} alt={text + " Logo"} height="20px" />}
+  {tag.logo && <Image src={tag.logo} alt={text + " Logo"} height={20} />}
   <span>
     {text}
   </span>

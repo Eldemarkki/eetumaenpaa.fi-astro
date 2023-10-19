@@ -8,7 +8,7 @@ interface Props {
   }[];
   image:
     | {
-        src: string;
+        src: ImageMetadata;
         alt: string;
       }
     | undefined;
@@ -18,6 +18,8 @@ interface Props {
 import type { TagType } from "../lib/TagType";
 import LinkCollection from "./LinkCollection.astro";
 import Pill from "./Pill.astro";
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from "astro";
 
 const { title, description, links, image, tags } = Astro.props;
 ---
@@ -37,7 +39,7 @@ const { title, description, links, image, tags } = Astro.props;
     )
   }
   <p>{description}</p>
-  {image && <img src={image.src} alt={image.alt} />}
+  {image && <Image src={image.src} alt={image.alt} />}
   <slot />
 </section>
 
