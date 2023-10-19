@@ -1,11 +1,15 @@
 ---
 import { displayDate } from "../lib/dateUtils";
 import Layout from "./Layout.astro";
+import { type CollectionEntry } from "astro:content";
 
-const { frontmatter } = Astro.props;
+const { frontmatter } = Astro.props as {
+  // TODO: If InferEntrySchema is ever exposed from Astro, use that instead.
+  frontmatter: CollectionEntry<"blog">["data"];
+};
 ---
 
-<Layout title={frontmatter.title}>
+<Layout title={frontmatter.title} description={frontmatter.excerpt}>
   <p>{displayDate(frontmatter.releaseDate)}</p>
   <h1>{frontmatter.title}</h1>
   <slot />

@@ -1,10 +1,14 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import Layout from "./Layout.astro";
 
-const { frontmatter } = Astro.props;
+const { frontmatter } = Astro.props as {
+  // TODO: If InferEntrySchema is ever exposed from Astro, use that instead.
+  frontmatter: CollectionEntry<"project">["data"];
+};
 ---
 
-<Layout title={frontmatter.name}>
+<Layout title={frontmatter.name} description={frontmatter.description}>
   <h1>{frontmatter.name}</h1>
   <slot />
 </Layout>
