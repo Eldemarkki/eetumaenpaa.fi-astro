@@ -1,11 +1,11 @@
-import { z, defineCollection } from 'astro:content';
+import { z, defineCollection } from "astro:content";
 
 const blogCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     releaseDate: z.string(),
-    excerpt: z.string()
-  })
+    excerpt: z.string(),
+  }),
 });
 
 const projectCollection = defineCollection({
@@ -14,14 +14,16 @@ const projectCollection = defineCollection({
     blogTitle: z.string(),
     releaseDate: z.string(),
     description: z.string(),
-    links: z.array(z.object({
-      href: z.string(),
-      title: z.string()
-    }))
-  })
+    links: z.array(
+      z.object({
+        href: z.string(),
+        title: z.string(),
+      }),
+    ),
+  }),
 });
 
 export const collections = {
   blog: blogCollection,
-  project: projectCollection
-}
+  project: projectCollection,
+};
