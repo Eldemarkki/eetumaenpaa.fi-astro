@@ -3,14 +3,14 @@ interface Props {
   links: {
     title: string;
     href: string;
-  }[]
+  }[];
 }
 
-const {links} = Astro.props;
+const { links } = Astro.props;
 ---
 
 <div>
-  {links.map(link => <a href={link.href}>{link.title}</a>)}
+  {links.map((link) => <a href={link.href}>{link.title}</a>)}
 </div>
 
 <style>

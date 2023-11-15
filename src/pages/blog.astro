@@ -20,7 +20,7 @@ const unsortedPosts = [...blogs, ...projects];
         .sort(
           (a, b) =>
             new Date(b.data.releaseDate).getTime() -
-            new Date(a.data.releaseDate).getTime()
+            new Date(a.data.releaseDate).getTime(),
         )
         .map((post) =>
           post.collection === "blog" ? (
@@ -39,7 +39,7 @@ const unsortedPosts = [...blogs, ...projects];
               releaseDate={new Date(post.data.releaseDate)}
               type={post.collection}
             />
-          )
+          ),
         )
     }
   </main>
