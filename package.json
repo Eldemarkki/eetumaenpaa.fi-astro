@@ -16,7 +16,7 @@
     "@astrojs/mdx": "^2.0.3",
     "astro": "^4.0.8",
     "prettier": "^3.1.1",
-    "prettier-plugin-astro": "^0.12.2",
+    "prettier-plugin-astro": "^0.12.3",
     "typescript": "^5.3.3"
   }
 }
