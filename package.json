@@ -12,7 +12,7 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "@astrojs/check": "^0.3.4",
+    "@astrojs/check": "^0.4.0",
     "@astrojs/mdx": "^2.0.3",
     "astro": "^4.0.8",
     "prettier": "^3.1.1",
