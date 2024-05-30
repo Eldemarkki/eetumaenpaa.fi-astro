@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.7.0",
-    "@astrojs/mdx": "^3.0.0",
+    "@astrojs/mdx": "^3.0.1",
     "astro": "^4.9.2",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.14.0",
